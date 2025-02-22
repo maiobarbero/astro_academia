@@ -25,10 +25,6 @@ export const template = {
 	website_url: 'https://maiobarbero.github.io/', // Astro needs to know your site’s deployed URL to generate a sitemap. It must start with http:// or https://
 	menu_left: false,
 	transitions: true,
-	lightTheme: 'winter',
-	darkTheme: 'dracula',
-	lightTheme: 'light',
-	darkTheme: 'dark',
 	lightTheme: 'light', // Select one of the Daisy UI Themes or create your own
 	darkTheme: 'dark', // Select one of the Daisy UI Themes or create your own
 	excerptLength: 200,
