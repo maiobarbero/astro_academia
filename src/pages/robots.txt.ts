@@ -1,10 +1,11 @@
 import type { APIRoute } from 'astro';
+import {template} from '@/settings';
 
 const getRobotsTxt = (sitemapURL: URL) => `
 User-agent: *
 Allow: /
 
-Sitemap: ${sitemapURL.href}
+Sitemap: ${template.base} + '/' + ${sitemapURL.href}
 `;
 
 export const GET: APIRoute = ({ site }) => {
