@@ -31,7 +31,7 @@ const { elements, colored } = Astro.props
 					</svg>
 				</div>
 				<div
-					class={`${index - (1 % 2) ? 'timeline-start' : 'timeline-end'} mb-10 md:text-end`}
+					class={`${index % 2 === 0 ? 'timeline-start' : 'timeline-end'} mb-10 md:text-end`}
 				>
 					<time class='font-mono italic'>{element.time}</time>
 					<div class='text-lg font-black'>{isExperience(element) ? element.title : element.degree}</div>
