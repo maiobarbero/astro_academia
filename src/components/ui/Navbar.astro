@@ -26,20 +26,20 @@ const {fullName, title} = profile
 			<div class='mx-4 mt-16'>
 				<ul class='space-y-4 menu grow shrink menu-md overflow-y-auto'>
 					<li>
-                        <a href=`${template.base}/` class='text-lg'>Home</a>
+                        <a href={`${template.base}/`} class='text-lg'>Home</a>
 					</li>
 					<li>
-                        <a href=`${template.base}/research` class='text-lg'>Research</a>
+                        <a href={`${template.base}/research`} class='text-lg'>Research</a>
 					</li>
 					<li>
-                        <a href=`${template.base}/papers` class='text-lg'>Papers</a>
+                        <a href={`${template.base}/papers`} class='text-lg'>Papers</a>
 					</li>
 					<li>
-                        <a href=`${template.base}/cv` class='text-lg'>CV</a>
+                        <a href={`${template.base}/cv`} class='text-lg'>CV</a>
                     </li>
                     {isBlogPopulated &&
 					<li>
-                        <a href=`${template.base}/blog/1` class='text-lg'>Blog</a>
+                        <a href={`${template.base}/blog/1`} class='text-lg'>Blog</a>
 </li>
                     }
 				</ul>

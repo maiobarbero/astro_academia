@@ -13,10 +13,10 @@ const { elements } = Astro.props
   {elements.map((element, index) => (
     <li class='group'>
       { isSkill(element)
-        ?
+        ? <>
         <h3 class='text-lg font-bold mb-2'>{element.title}</h3>
         <p>{element.description}</p>
-        :
+        </> : <>
       <a
         href={element.link as string}
         class='block hover:text-accent transition-colors duration-200'
@@ -35,6 +35,7 @@ const { elements } = Astro.props
         {element.time}
       </p>
       <p>{element.abstract}</p>
+      </>
     }
     {/* Uncomment this line to add a small border bottom for each element
     {index !== elements.length -1 && <hr class="mt-6 border-primary/40" />}  */}
