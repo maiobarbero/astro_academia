@@ -18,6 +18,7 @@ export const social = {
 	scholar: '',
 	inspire: '',
 	arxiv: '',
+	orcid: '',
 }
 
 export const template = {
