@@ -9,6 +9,9 @@ If you find Astro Academia useful or appreciate my work, consider supporting me!
 <a href="https://buymeacoffee.com/maiobarbero" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-yellow.png" alt="Buy Me A Coffee" height="41" width="174"></a>
 <a href="https://www.producthunt.com/products/astro-academia?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-astro&#0045;academia" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1026976&theme=light&t=1760776422941" alt="Astro&#0032;Academia - Academic&#0032;website&#0032;template | Product Hunt" style="width: 189px; height: 41px;" width="189" height="41" /></a>
 
+### Demo
+You can see Astro Academia at the following link: [ demo link](https://maiobarbero.github.io/astro_academia/)
+
 ## How to use it
 
 Fork this repository to create your new website starting from this template.
