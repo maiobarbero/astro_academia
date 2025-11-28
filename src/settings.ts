@@ -13,6 +13,7 @@ export const social = {
 	email: '',
 	linkedin: '',
 	x: 'https://www.x.com/',
+	bluesky: '',
 	github: '',
 	gitlab: '',
 	scholar: '',
