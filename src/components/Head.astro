@@ -46,10 +46,10 @@ const { title, description, image } = Astro.props
 <meta property='twitter:image' content={new URL(image, Astro.url)} />
 
 <!-- Theme selector scripts -->
-<script is:inline>
-  // Get stored theme or default to light
+<script is:inline define:vars={{ lightTheme: template.lightTheme }} >
+  // Get stored theme or default to configured light theme set in settings.ts
   const getStoredTheme = () => {
-    return localStorage.getItem('theme') || 'light';
+    return localStorage.getItem('theme') || lightTheme;
   }
 
   // Apply theme immediately to prevent flash
