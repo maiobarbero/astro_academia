@@ -8,6 +8,7 @@ import {template} from  '../../settings.ts'
     value={template.darkTheme}
     class="toggle theme-controller bg-base-content col-span-2 col-start-1 row-start-1"
     data-choose-theme
+    id="theme-toggle"
 />
   <svg
     class="stroke-base-100 fill-base-100 col-start-1 row-start-1"
@@ -38,3 +39,24 @@ import {template} from  '../../settings.ts'
     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
   </svg>
 </label>
+
+<script is:inline define:vars={{ darkTheme: template.darkTheme, lightTheme: template.lightTheme }}>
+  {
+    const initToggle = () => {
+      const toggle = document.getElementById('theme-toggle');
+      if (!toggle) return;
+
+      const currentTheme = localStorage.getItem('theme') || lightTheme;
+      toggle.checked = currentTheme === darkTheme;
+
+      toggle.onchange = (e) => {
+        const theme = e.target.checked ? darkTheme : lightTheme;
+        localStorage.setItem('theme', theme);
+        document.documentElement.setAttribute('data-theme', theme);
+      };
+    };
+
+    initToggle();
+    document.addEventListener('astro:after-swap', initToggle);
+  }
+</script>
