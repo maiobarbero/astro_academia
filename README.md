@@ -1,6 +1,7 @@
 # Astro Academia
 
 [![CI](https://github.com/maiobarbero/astro_academia/actions/workflows/ci.yml/badge.svg)](https://github.com/maiobarbero/astro_academia/actions/workflows/ci.yml)
+![Forks](https://img.shields.io/github/forks/maiobarbero/astro_academia)
 [![Astro](https://img.shields.io/badge/built_with-Astro-BC52EE?logo=astro&logoColor=white)](https://astro.build/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
