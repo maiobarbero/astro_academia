@@ -4,8 +4,10 @@ import Layout from '@/layouts/Layout.astro'
 import BlogPostCard from '@/components/ui/BlogPostCard.astro'
 import { template } from '@/settings'
 import { getCollection } from 'astro:content'
+import type { GetStaticPaths, Page } from 'astro'
+import type { CollectionEntry } from 'astro:content'
 
-export async function getStaticPaths({ paginate }): Promise<Astro.getStaticPathsResult> {
+export const getStaticPaths = (async ({ paginate }) => {
     const blogEntries = await getCollection("blog");
 
     const posts = blogEntries
@@ -14,6 +16,9 @@ export async function getStaticPaths({ paginate }): Promise<Astro.getStaticPaths
     return paginate(posts, {
         pageSize: template.postPerPage,
     });
+}) satisfies GetStaticPaths
+interface Props {
+    page: Page<CollectionEntry<'blog'>>
 }
 const { page } = Astro.props
 ---

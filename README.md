@@ -102,5 +102,36 @@ This is the content of the new blog post. Write your article here using Markdown
 
 Once you have added the new blog post, it will be automatically included in the blog collection and displayed on the blog page of your website.
 
+## Development checks
+
+Use the Node version in `.nvmrc` and install dependencies with `npm ci`.
+
+```sh
+npm test       # Core search tests using Node's built-in test runner
+npm run lint   # ESLint for JavaScript, TypeScript, and Astro files
+npm run check  # Astro diagnostics and TypeScript static analysis
+```
+
+GitHub Actions runs these checks on pushes and pull requests. Tests cover search
+indexing, filtering, content/URL preparation, snippets, and loading recovery.
+Keep additions focused on realistic core regressions; no UI tests or coverage quota.
+
 ## Deploy
 The template provides a workflow to deploy the website on Github pages as a static website.
+
+## Releases and changelog
+
+Publish a GitHub release with a tag and release notes (GitHub's **Generate release
+notes** button can provide a starting point). The **Update changelog** workflow
+regenerates [CHANGELOG.md](CHANGELOG.md) from all published releases, newest first,
+and commits it to the default branch. Pre-releases are included and labeled;
+drafts are excluded. Editing or deleting a release also refreshes the file.
+
+You can run the workflow manually from the Actions tab to import existing releases.
+Edit release notes on GitHub instead of editing the generated changelog. The
+workflow uses the built-in `GITHUB_TOKEN` with `contents: write`; repository rules
+must allow it to commit to the default branch.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).

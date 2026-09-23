@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { insertMultiple, load, save } from 'zbsearch';
-import { createSearchDatabase, queryIndex, searchSnippet } from '../src/lib/search.ts';
+import { createSearchDatabase, loadSearchIndex, queryIndex, searchSnippet } from '../src/lib/search.ts';
 import { blogSearchContent, paperSearchUrl, sitePath } from '../src/lib/search-records.ts';
 
 test('a serialized index searches blog bodies and paper abstracts with typo tolerance', async () => {
@@ -53,4 +53,21 @@ test('snippets show body matches beyond the beginning of a document', () => {
   assert.ok(snippet.startsWith('…'));
   assert.ok(snippet.includes('Uraninite'));
   assert.ok(snippet.length <= 182);
+});
+
+test('a failed index request can be retried and concurrent callers share the successful load', async (t) => {
+  const source = createSearchDatabase();
+  await insertMultiple(source, [
+    { id: 'blog:1', title: 'Radium', content: 'Lab notes.', category: 'blog', url: '/blog/lab' },
+  ]);
+  const fetchMock = t.mock.method(globalThis, 'fetch', async () => Response.json(save(source)));
+  fetchMock.mock.mockImplementationOnce(async () => new Response(null, { status: 503 }));
+
+  await assert.rejects(loadSearchIndex('/search-index.json'), /could not be loaded/);
+  const pending = loadSearchIndex('/search-index.json');
+  assert.equal(loadSearchIndex('/search-index.json'), pending);
+  const db = await pending;
+  assert.equal((await queryIndex(db, 'radium', 'all')).hits[0].id, 'blog:1');
+  assert.equal(await loadSearchIndex('/search-index.json'), db);
+  assert.equal(fetchMock.mock.callCount(), 2);
 });
