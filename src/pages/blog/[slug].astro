@@ -1,6 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro'
-import {template} from '@/settings'
+import { getTagUrl } from '@/lib/utils'
 import {getCollection, render} from 'astro:content'
 
 export async function getStaticPaths(): Promise<Array<{ params: { slug: string }, props: { post: any } }>> {
@@ -60,7 +60,7 @@ const { Content } = await render(post);
 						tags && (
 							<div class='flex flex-wrap gap-2'>
 								{tags.map(tag => (
-									<span class='badge badge-accent badge-outline'>{tag}</span>
+									<a href={getTagUrl(tag)} rel='tag' class='badge badge-accent badge-outline no-underline hover:underline'>{tag}</a>
 								))}
 							</div>
 						)
