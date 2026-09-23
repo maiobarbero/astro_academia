@@ -2,7 +2,6 @@
 import { ClientRouter } from 'astro:transitions';
 
 import BetterIcon from '../components/ui/BetterIcon.astro'
-import DarkLightController from '../components/ui/DarkLightController.astro'
 import ThemeSelector from '../components/ui/ThemeSelector.astro'
 import Navbar from '../components/ui/Navbar.astro'
 import Head from '../components/Head.astro'
@@ -25,7 +24,7 @@ const {
 ---
 
 <!doctype html>
-<html lang='en'>
+<html lang='en' data-theme={template.lightTheme}>
 	<head>
 		{template.transitions && <ClientRouter /> }
 
@@ -43,8 +42,7 @@ const {
 					<nav class='navbar'>
 						<div class='navbar-start'>
 							{template.menu_left &&
-								<DarkLightController/>
-								/* <ThemeSelector transition:persist /> */
+								<ThemeSelector />
 							}
 							<label for='my-drawer' class='btn btn-square btn-ghost lg:hidden'>
 								<BetterIcon>
@@ -69,8 +67,7 @@ const {
 						</div>
 						<div class='navbar-end'>
 							{!template.menu_left &&
-								<DarkLightController/>
-								/* <ThemeSelector transition:persist /> */
+								<ThemeSelector />
 							}
 						</div>
 					</nav>

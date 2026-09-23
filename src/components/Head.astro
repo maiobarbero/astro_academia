@@ -45,29 +45,51 @@ const { title, description, image } = Astro.props
 <meta property='twitter:description' content={description} />
 <meta property='twitter:image' content={new URL(image, Astro.url)} />
 
-<!-- Theme selector scripts -->
-<script is:inline>
-  // Get stored theme or default to light
-  const getStoredTheme = () => {
-    return localStorage.getItem('theme') || 'light';
+<!-- Restore the configured theme before the page paints. -->
+<script is:inline define:vars={{ lightTheme: template.lightTheme, darkTheme: template.darkTheme }}>
+  try {
+    const savedTheme = localStorage.getItem('theme');
+    document.documentElement.dataset.theme =
+      savedTheme === lightTheme || savedTheme === darkTheme ? savedTheme : lightTheme;
+  } catch {
+    document.documentElement.dataset.theme = lightTheme;
   }
-
-  // Apply theme immediately to prevent flash
-  const theme = getStoredTheme();
-  document.documentElement.setAttribute('data-theme', theme);
-
-  // Re-apply theme after navigation
-  document.addEventListener('astro:after-swap', () => {
-    const currentTheme = getStoredTheme();
-    document.documentElement.setAttribute('data-theme', currentTheme);
-  });
 </script>
 <script>
-	import { themeChange } from 'theme-change'
-	themeChange()
+  import { template } from '@/settings'
 
-  // Re-initialize after Astro view transitions
-  document.addEventListener('astro:after-swap', () => {
-    themeChange(false); // false = don't persist to localStorage
-  });
+  const { lightTheme, darkTheme } = template
+
+  function currentTheme() {
+    const theme = document.documentElement.dataset.theme
+    return theme === darkTheme ? darkTheme : lightTheme
+  }
+
+  function syncControls() {
+    document.querySelectorAll<HTMLInputElement>('[data-theme-toggle]').forEach((input) => {
+      input.checked = currentTheme() === darkTheme
+    })
+  }
+
+  document.addEventListener('change', (event) => {
+    const input = event.target
+    if (!(input instanceof HTMLInputElement) || !input.matches('[data-theme-toggle]')) return
+
+    const theme = input.checked ? darkTheme : lightTheme
+    document.documentElement.dataset.theme = theme
+    syncControls()
+
+    try {
+      localStorage.setItem('theme', theme)
+    } catch {
+      // Keep switching usable when browser storage is unavailable.
+    }
+  })
+
+  // Carry the active theme into the next page before Astro replaces the DOM.
+  document.addEventListener('astro:before-swap', (event) => {
+    event.newDocument.documentElement.dataset.theme = currentTheme()
+  })
+  document.addEventListener('astro:page-load', syncControls)
+  syncControls()
 </script>
