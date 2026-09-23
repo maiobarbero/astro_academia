@@ -13,7 +13,7 @@ Astro Academia is an Astro template for a personal academic website. It brings y
 
 The template includes a blog with tags and pagination, search across posts and publications, light and dark themes, an RSS feed, and a sitemap. The build produces a static website you can host on GitHub Pages or another static hosting service.
 
-[View the demo](https://maiobarbero.github.io/astro_academia/)
+[View the demo](https://astro-academia.maiobarbero.dev)
 
 ## Getting started
 
