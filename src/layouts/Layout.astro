@@ -2,13 +2,14 @@
 import { ClientRouter } from 'astro:transitions';
 
 import BetterIcon from '../components/ui/BetterIcon.astro'
-import DarkLightController from '../components/ui/DarkLightController.astro'
 import ThemeSelector from '../components/ui/ThemeSelector.astro'
 import Navbar from '../components/ui/Navbar.astro'
 import Head from '../components/Head.astro'
+import '../styles/global.css'
 
 import { seo, profile, template } from '../settings'
 import Footer from '../components/ui/Footer.astro'
+import Search from '../components/ui/Search.astro'
 
 type Props = {
 	title?: string
@@ -24,7 +25,7 @@ const {
 ---
 
 <!doctype html>
-<html lang='en'>
+<html lang='en' data-theme={template.lightTheme}>
 	<head>
 		{template.transitions && <ClientRouter /> }
 
@@ -42,8 +43,7 @@ const {
 					<nav class='navbar'>
 						<div class='navbar-start'>
 							{template.menu_left &&
-								<DarkLightController/>
-								/* <ThemeSelector transition:persist /> */
+								<ThemeSelector />
 							}
 							<label for='my-drawer' class='btn btn-square btn-ghost lg:hidden'>
 								<BetterIcon>
@@ -66,10 +66,10 @@ const {
 							{profile.title}
 							{profile.fullName}
 						</div>
-						<div class='navbar-end'>
+						<div class='navbar-end gap-3 sm:gap-4'>
+							<Search />
 							{!template.menu_left &&
-								<DarkLightController/>
-								/* <ThemeSelector transition:persist /> */
+								<ThemeSelector />
 							}
 						</div>
 					</nav>

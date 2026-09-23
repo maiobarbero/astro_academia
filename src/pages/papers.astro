@@ -13,8 +13,8 @@ const ALL_PAPERS = publications; // This will be replaced with dynamic data late
 
     <div class="space-y-8">
       {
-        ALL_PAPERS.map((paper) => (
-          <div class="card bg-base-200">
+        ALL_PAPERS.map((paper, index) => (
+          <div id={`paper-${index + 1}`} class="card bg-base-200 scroll-mt-8">
             <div class="card-body">
               <h2 class="card-title text-xl">
                 <a href={template.base + paper.link} class="hover:text-accent">

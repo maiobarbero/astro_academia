@@ -1,0 +1,175 @@
+---
+const indexUrl = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/search-index.json`;
+---
+
+<site-search data-index-url={indexUrl} class="inline-flex shrink-0">
+  <button type="button" data-open class="btn btn-ghost w-10 gap-3 px-0 sm:w-auto sm:border-base-300 sm:px-3" aria-label="Search blog posts and papers" aria-haspopup="dialog" aria-controls="site-search-dialog" title="Search (Ctrl/⌘ K)">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="size-5" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.75" /><path stroke-linecap="round" d="m16 16 4.5 4.5" /></svg>
+    <span class="hidden sm:inline font-normal text-base-content/70">Search</span>
+    <kbd data-shortcut class="kbd kbd-sm hidden sm:inline-flex text-base-content/70" aria-hidden="true">Ctrl K</kbd>
+  </button>
+  <dialog id="site-search-dialog" class="modal" aria-labelledby="search-title">
+    <div class="modal-box flex h-[min(36rem,calc(100dvh-2rem))] max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-2xl flex-col p-0 bg-base-100 text-base-content">
+      <div class="shrink-0 p-5 border-b border-base-300">
+        <div class="flex items-center justify-between gap-4 mb-4">
+          <h2 id="search-title" class="text-lg font-semibold">Search</h2>
+          <button type="button" data-close class="btn btn-ghost btn-sm" aria-label="Close search">Close <kbd class="kbd kbd-xs hidden sm:inline">Esc</kbd></button>
+        </div>
+        <label for="search-query" class="sr-only">Search blog posts and papers</label>
+        <input id="search-query" type="search" class="input w-full" placeholder="Search blog posts and papers…" autocomplete="off" spellcheck="false" autofocus aria-controls="search-results" />
+        <div class="flex gap-2 mt-4" role="group" aria-label="Search in">
+          <button type="button" class="btn btn-sm btn-neutral transition-none" data-category="all" aria-pressed="true">All</button>
+          <button type="button" class="btn btn-sm btn-ghost transition-none" data-category="blog" aria-pressed="false">Blog posts</button>
+          <button type="button" class="btn btn-sm btn-ghost transition-none" data-category="paper" aria-pressed="false">Papers</button>
+        </div>
+      </div>
+      <div class="shrink-0 px-5 py-4">
+        <p data-status role="status" aria-live="polite" class="text-sm text-base-content/70">Search blog posts, paper titles, and abstracts.</p>
+        <button type="button" data-retry class="btn btn-sm btn-outline mt-3" hidden>Try again</button>
+      </div>
+      <ul id="search-results" class="min-h-0 flex-1 overflow-y-auto px-3 pb-3" aria-label="Search results"></ul>
+    </div>
+    <form method="dialog" class="modal-backdrop"><button aria-label="Close search">Close</button></form>
+  </dialog>
+</site-search>
+
+<script>
+  import type { SearchCategory } from '@/lib/search';
+
+  class SiteSearch extends HTMLElement {
+    private events?: AbortController;
+
+    connectedCallback() {
+      this.events?.abort();
+      this.events = new AbortController();
+      const { signal } = this.events;
+      const dialog = this.querySelector('dialog')!;
+      const input = this.querySelector('input')!;
+      const results = this.querySelector('ul')!;
+      const status = this.querySelector<HTMLElement>('[data-status]')!;
+      const retry = this.querySelector<HTMLButtonElement>('[data-retry]')!;
+      const opener = this.querySelector<HTMLButtonElement>('[data-open]')!;
+      const shortcut = /Mac|iPhone|iPad|iPod/.test(navigator.platform) ? '⌘ K' : 'Ctrl K';
+      this.querySelector('[data-shortcut]')!.textContent = shortcut;
+      opener.title = `Search (${shortcut})`;
+      let category: SearchCategory = 'all';
+      let request = 0;
+
+      const runSearch = async () => {
+        const current = ++request;
+        const term = input.value.trim();
+        retry.hidden = true;
+        if (!term) {
+          results.replaceChildren();
+          results.removeAttribute('aria-busy');
+          status.textContent = 'Search blog posts, paper titles, and abstracts.';
+          return;
+        }
+        results.setAttribute('aria-busy', 'true');
+        // Keep the current results visible; only announce loading if it takes time.
+        const loadingTimer = window.setTimeout(() => {
+          if (current === request && !signal.aborted) status.textContent = 'Searching…';
+        }, 150);
+        try {
+          const { loadSearchIndex, queryIndex, searchSnippet } = await import('@/lib/search');
+          const db = await loadSearchIndex(this.dataset.indexUrl!);
+          if (current !== request || signal.aborted) return;
+          const found = await queryIndex(db, term, category);
+          if (current !== request || signal.aborted) return;
+          status.textContent = found.count === 0
+            ? 'No results. Try another word or a different category.'
+            : `${found.count > found.hits.length ? `Showing ${found.hits.length} of ${found.count}` : found.count} result${found.count === 1 ? '' : 's'}`;
+          const nextResults = document.createDocumentFragment();
+          for (const { document: hit } of found.hits) {
+            const item = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = hit.url;
+            link.className = 'block rounded-lg px-3 py-3 hover:bg-base-200 focus-visible:bg-base-200 focus-visible:outline-2 focus-visible:outline-offset-[-2px]';
+            const label = document.createElement('span');
+            label.className = 'block text-xs text-base-content/70 mb-1';
+            label.textContent = hit.category === 'blog' ? 'Blog post' : 'Paper';
+            const title = document.createElement('span');
+            title.className = 'block font-semibold break-words';
+            title.textContent = hit.title;
+            const snippet = document.createElement('p');
+            snippet.className = 'text-sm text-base-content/80 mt-1 break-words';
+            snippet.textContent = searchSnippet(hit.content, term);
+            link.append(label, title, snippet);
+            item.append(link);
+            nextResults.append(item);
+          }
+          results.replaceChildren(nextResults);
+          results.scrollTop = 0;
+        } catch {
+          if (current !== request || signal.aborted) return;
+          results.replaceChildren();
+          status.textContent = 'Search could not load. Please try again.';
+          retry.hidden = false;
+        } finally {
+          window.clearTimeout(loadingTimer);
+          if (current === request) results.removeAttribute('aria-busy');
+        }
+      };
+
+      const open = () => {
+        if (dialog.open) return;
+        dialog.showModal();
+        input.focus();
+        void runSearch();
+      };
+      opener.addEventListener('click', open, { signal });
+      this.querySelector('[data-close]')!.addEventListener('click', () => dialog.close(), { signal });
+      dialog.addEventListener('close', () => { ++request; }, { signal });
+      input.addEventListener('input', runSearch, { signal });
+      retry.addEventListener('click', runSearch, { signal });
+      this.querySelectorAll<HTMLButtonElement>('[data-category]').forEach(button => {
+        button.addEventListener('click', () => {
+          if (category === button.dataset.category) return;
+          category = button.dataset.category as SearchCategory;
+          this.querySelectorAll<HTMLButtonElement>('[data-category]').forEach(filter => {
+            const active = filter === button;
+            filter.setAttribute('aria-pressed', String(active));
+            filter.classList.toggle('btn-neutral', active);
+            filter.classList.toggle('btn-ghost', !active);
+          });
+          void runSearch();
+        }, { signal });
+      });
+      results.addEventListener('click', event => {
+        if (event.target instanceof Element && event.target.closest('a')) dialog.close();
+      }, { signal });
+      dialog.addEventListener('keydown', event => {
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          dialog.close();
+          return;
+        }
+        if (event.key === 'Enter' && event.target === input) {
+          if (!results.hasAttribute('aria-busy')) results.querySelector('a')?.click();
+          return;
+        }
+        if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+        const links = [...results.querySelectorAll('a')];
+        if (!links.length || (event.target !== input && !links.includes(document.activeElement as HTMLAnchorElement))) return;
+        event.preventDefault();
+        const index = links.indexOf(document.activeElement as HTMLAnchorElement);
+        if (event.key === 'ArrowUp' && index === -1) links.at(-1)?.focus();
+        else if (event.key === 'ArrowUp' && index === 0) input.focus();
+        else links[(index + (event.key === 'ArrowDown' ? 1 : -1) + links.length) % links.length]?.focus();
+      }, { signal });
+      document.addEventListener('keydown', event => {
+        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+          event.preventDefault();
+          open();
+        }
+      }, { signal });
+      document.addEventListener('astro:before-swap', () => dialog.close(), { signal });
+    }
+
+    disconnectedCallback() {
+      this.events?.abort();
+    }
+  }
+
+  if (!customElements.get('site-search')) customElements.define('site-search', SiteSearch);
+</script>

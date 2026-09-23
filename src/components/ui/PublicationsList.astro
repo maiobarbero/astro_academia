@@ -10,7 +10,7 @@ interface Props {
 const { elements } = Astro.props
 ---
 <ul class='space-y-8'>
-  {elements.map((element, index) => (
+  {elements.map((element) => (
     <li class='group'>
       { isSkill(element)
         ? <>

@@ -1,0 +1,43 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import { getTagUrl, trimExcerpt } from '@/lib/utils'
+import { template } from '@/settings'
+
+interface Props {
+    post: CollectionEntry<'blog'>
+}
+const { post } = Astro.props
+---
+
+<article class='card bg-base-200 transition-all'>
+	<div class='card-body'>
+		<div class='flex flex-wrap justify-between items-start gap-4'>
+			<h2 class='card-title text-xl'>
+				<a href={`${template.base}/blog/${post.id}`} class='hover:text-accent'>
+					{post.data.title}
+				</a>
+			</h2>
+			{post.data.tags?.[0] && (
+				<a href={getTagUrl(post.data.tags[0])} rel='tag' class='badge badge-accent badge-outline p-4 hover:underline'>
+					{post.data.tags[0]}
+				</a>
+			)}
+		</div>
+		<time datetime={post.data.date} class='text-sm text-base-content/71'>
+			{new Date(post.data.date).toLocaleDateString('en-US', {
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric',
+			})}
+		</time>
+		<p class='mt-4'>{trimExcerpt(post.data.excerpt)}</p>
+		<div class='card-actions justify-end'>
+			<a
+				href={`${template.base}/blog/${post.id}`}
+				class='btn btn-sm btn-secondary text-secondary-content'
+			>
+				Read More
+			</a>
+		</div>
+	</div>
+</article>

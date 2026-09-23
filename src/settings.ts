@@ -1,4 +1,12 @@
-export const profile = {
+interface Profile {
+	fullName: string
+	title: string
+	institute: string
+	author_name: string
+	research_areas: { title: string; description: string; field: string }[]
+}
+
+export const profile: Profile = {
 	fullName: 'Your Name',
 	title: '',
 	institute: '',

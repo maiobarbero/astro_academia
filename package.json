@@ -1,28 +1,44 @@
 {
   "name": "astro-academia",
   "type": "module",
-  "version": "0.0.1",
+  "version": "2.0.0",
   "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "test:search": "node --test tests/search.test.mjs",
+    "check": "astro check && tsc --noEmit",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
-    "@astrojs/react": "^4.1.4",
-    "@astrojs/rss": "^4.0.15",
-    "@astrojs/sitemap": "^3.2.1",
-    "@astrojs/tailwind": "^5.1.4",
-    "@types/react": "^19.0.7",
-    "@types/react-dom": "^19.0.3",
-    "astro": "^5.15.9",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "tailwindcss": "^3.4.17",
-    "theme-change": "^2.5.0"
+    "@astrojs/react": "^7.0.0",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.4",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "astro": "^7.3.4",
+    "mdast-util-to-string": "^4.0.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "remark-parse": "^11.0.0",
+    "tailwindcss": "^4.3.3",
+    "theme-change": "^3.0.4",
+    "unified": "^11.0.5",
+    "zbsearch": "^4.0.0"
   },
   "devDependencies": {
-    "@tailwindcss/typography": "^0.5.16",
-    "daisyui": "^4.12.23"
-  }
+    "@astrojs/check": "^0.9.10",
+    "@eslint/js": "^10.0.1",
+    "@tailwindcss/typography": "^0.5.20",
+    "daisyui": "^5.7.43",
+    "eslint": "^10.11.0",
+    "eslint-plugin-astro": "^3.2.1",
+    "globals": "^17.12.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.70.1"
+  },
+  "license": "MIT"
 }
