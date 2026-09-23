@@ -1,137 +1,165 @@
-# Astro Academia Documentation
+# Astro Academia
 
-## What is Astro Academia?
+[![CI](https://github.com/maiobarbero/astro_academia/actions/workflows/ci.yml/badge.svg)](https://github.com/maiobarbero/astro_academia/actions/workflows/ci.yml)
+[![Astro](https://img.shields.io/badge/built_with-Astro-BC52EE?logo=astro&logoColor=white)](https://astro.build/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-Astro Academia is a personal academic website built using Astro, a modern static site generator. The website is designed to showcase academic achievements, research papers, blog posts, and a CV. It is fast, responsive, and easy to maintain, making it an ideal platform for academics and researchers to present their work.
+<a href="https://buymeacoffee.com/maiobarbero"><img src="https://cdn.buymeacoffee.com/buttons/default-yellow.png" alt="Buy Me a Coffee" height="41" width="174"></a>
 
-If you find Astro Academia useful or appreciate my work, consider supporting me! Your support helps keep this project maintained and encourages further development. 🚀✨
+<!-- Add the project banner here when ready. -->
 
-<a href="https://buymeacoffee.com/maiobarbero" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-yellow.png" alt="Buy Me A Coffee" height="41" width="174"></a>
-<a href="https://www.producthunt.com/products/astro-academia?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-astro&#0045;academia" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1026976&theme=light&t=1760776422941" alt="Astro&#0032;Academia - Academic&#0032;website&#0032;template | Product Hunt" style="width: 189px; height: 41px;" width="189" height="41" /></a>
+Astro Academia is an Astro template for a personal academic website. It brings your research, publications, CV, and writing into one place, with content stored in Markdown and TypeScript files alongside the site.
 
-### Demo
-You can see Astro Academia at the following link: <a href="https://maiobarbero.github.io/astro_academia/" target="_blank">demo page</a>
+The template includes a blog with tags and pagination, search across posts and publications, light and dark themes, an RSS feed, and a sitemap. The build produces a static website you can host on GitHub Pages or another static hosting service.
 
-## How to use it
+[View the demo](https://maiobarbero.github.io/astro_academia/)
 
-Fork this repository to create your new website starting from this template.
+## Getting started
 
-## How to Create a CV Using the `cv.ts` File
+Fork this repository, then clone your fork. From the project directory, install dependencies and start the development server:
 
-The `cv.ts` file located in the `src/data/` directory is used to define the structure and content of your CV. This file exports an object containing various sections of your CV, such as education, experience, publications, and more.
-
-### Example Structure of `cv.ts`
-
-```typescript
-export const cv = {
-  education: [
-    {
-      degree: "Ph.D. in Computer Science",
-      institution: "University of Example",
-      year: "2020",
-    },
-    {
-      degree: "M.Sc. in Computer Science",
-      institution: "University of Example",
-      year: "2016",
-    },
-  ],
-  experience: [
-    {
-      title: "Research Scientist",
-      company: "Example Research Lab",
-      year: "2021-Present",
-    },
-    {
-      title: "Software Engineer",
-      company: "Tech Company",
-      year: "2016-2021",
-    },
-  ],
-  // Add more sections as needed
-};
+```sh
+nvm install
+nvm use
+npm ci
+npm run dev
 ```
 
-To create or update your CV, modify the `cv.ts` file with your personal information and achievements. The CV will be automatically rendered on the CV page of your website.
+The `.nvmrc` file specifies the project's Node.js version. If you use another version manager, select that version before installing dependencies.
 
-## How to Use the `settings.ts` File
+Open the local address printed in your terminal, usually `http://localhost:4321`. Changes to your content and settings appear as you edit.
 
-The `settings.ts` file located in the `src/` directory is used to configure various settings for your Astro Academia website. This file exports an object containing settings such as site title, description, social media links, and more.
+## Make it yours
 
-### Example Structure of `settings.ts`
+### Profile and settings
 
-```typescript
-export const settings = {
-  siteTitle: "Astro Academia",
-  siteDescription: "A personal academic website built with Astro.",
-  socialLinks: {
-    twitter: "https://twitter.com/yourusername",
-    github: "https://github.com/yourusername",
-    linkedin: "https://linkedin.com/in/yourusername",
+Start with [src/settings.ts](src/settings.ts). It exports four objects:
+
+| Export | What to change |
+| --- | --- |
+| `profile` | Your name, title, institute, research areas, and the author name highlighted in publications. |
+| `social` | Your email and links to social or academic profiles. Set unused values to `''` to hide their icons. |
+| `template` | Your deployed URL, base path, navigation position, themes, transitions, excerpt length, and posts per page. |
+| `seo` | The default page title, description, and social preview image. |
+
+For example, replace the `profile` export with your details:
+
+```ts
+export const profile: Profile = {
+  fullName: 'Alex Smith',
+  title: 'Research Fellow',
+  institute: 'University of Example',
+  author_name: 'Alex Smith',
+  research_areas: [
+    {
+      title: 'Scientific Computing',
+      description: 'Numerical methods for modelling physical systems.',
+      field: 'computer-science',
+    },
+  ],
+}
+```
+
+Research area icons are defined in [src/data/researchIcons.ts](src/data/researchIcons.ts). Choose a matching field or add your own.
+
+Some content lives directly in Astro components. Replace the introduction in [src/components/Welcome.astro](src/components/Welcome.astro), the short research description in [src/components/ui/Hero.astro](src/components/ui/Hero.astro), and the sample text and page title in [src/pages/research.astro](src/pages/research.astro).
+
+Replace `src/assets/profile_pictures.jpg` with your photo and `public/favicon.svg` with your favicon. Add a social preview image under `public/` and set `seo.default_image` to its public path, for example `/images/social-preview.png` for `public/images/social-preview.png`.
+
+### CV and publications
+
+Edit [src/data/cv.ts](src/data/cv.ts). It exports separate `experiences`, `education`, `skills`, and `publications` arrays. The CV page reads all four; the papers page uses the same publications array.
+
+Keep those export names and replace the placeholder entries. For example:
+
+```ts
+export const education = [
+  {
+    school: 'University of Example',
+    time: '2018 - 2022',
+    degree: 'Ph.D. in Computer Science',
+    location: 'Amsterdam, Netherlands',
+    description: 'Research on numerical methods for physical simulations.',
   },
-  // Add more settings as needed
-};
+]
+
+export const experiences = [
+  {
+    company: 'Example Research Lab',
+    time: '2022 - Present',
+    title: 'Research Fellow',
+    location: 'Amsterdam, Netherlands',
+    description: 'Developing tools for scientific computing.',
+  },
+]
 ```
 
-To customize your website settings, modify the `settings.ts` file with your desired values. These settings will be used throughout your website to display the appropriate information.
+Use `time` for dates and `school` for education institutions. The CV sorts entries using the end of the `time` range; use a format such as `2018 - 2022` or `2022 - Present`. Set unused arrays to `[]` to hide those CV sections.
 
-## Where to Find the Blog Collection and Where to Add New Blog Posts
+The fields for skills and publications are defined in [src/types/cv.ts](src/types/cv.ts). Publications include a title, authors, journal, and time, with optional link and abstract fields.
 
-The blog collection is located in the `src/content/BlogPosts/` directory. Each blog post is a Markdown file with a `.md` extension. The blog posts are named sequentially (e.g., `post1.md`, `post2.md`, etc.).
+### Blog posts
 
-### Adding a New Blog Post
+Add Markdown files to `src/content/BlogPosts/`. Each post needs a title, a quoted date, and an excerpt. Tags are optional.
 
-1. Navigate to the `src/content/BlogPosts/` directory.
-2. Create a new Markdown file for your blog post (e.g., `post1.md`).
-3. Add the content of your blog post using Markdown syntax. Include frontmatter at the top of the file to define metadata such as title, date, and tags.
-
-### Example Blog Post (`post11.md`)
+For example, create `src/content/BlogPosts/field-notes.md`:
 
 ```markdown
 ---
-title: "New Blog Post"
-date: "2023-10-01"
-tags: ["research", "astro"]
-excerpt: "Some short paragraphs"
+title: "Notes from the field"
+date: "2026-09-23"
+excerpt: "Observations from our latest round of measurements."
+tags: ["research", "fieldwork"]
 ---
 
-# New Blog Post
+Our latest measurements raised a few questions about the model.
 
-This is the content of the new blog post. Write your article here using Markdown syntax.
+Write the rest of your post here using Markdown.
 ```
 
-Once you have added the new blog post, it will be automatically included in the blog collection and displayed on the blog page of your website.
+Posts are included in the blog automatically. Replace or remove the sample post before publishing.
+
+### Themes
+
+Set `template.lightTheme` and `template.darkTheme` in `src/settings.ts` to theme names enabled in [src/styles/global.css](src/styles/global.css). That stylesheet contains the DaisyUI theme configuration and is also the place to add your own styles.
+
+## Build and deploy
+
+Before building, set `template.website_url` and `template.base` in `src/settings.ts` for your hosting location:
+
+| Hosting location | `website_url` | `base` |
+| --- | --- | --- |
+| GitHub Pages project site | `https://your-username.github.io` | `/your-repository` |
+| GitHub Pages user site | `https://your-username.github.io` | `''` |
+| Custom domain | `https://example.com` | `''` |
+
+These values are used by the Astro configuration and site links. Replace the default localhost URL before publishing.
+
+```sh
+npm run build
+npm run preview
+```
+
+The build writes the site to `dist/`. Preview it locally, then configure your static hosting service to run `npm ci` and `npm run build` with the Node.js version from `.nvmrc`, and publish `dist/`.
+
+For GitHub Pages, configure a Pages deployment workflow to build and upload `dist/`. The workflows currently included in this repository run development checks and update the changelog; deployment needs its own setup.
 
 ## Development checks
 
-Use the Node version in `.nvmrc` and install dependencies with `npm ci`.
-
 ```sh
-npm test       # Core search tests using Node's built-in test runner
-npm run lint   # ESLint for JavaScript, TypeScript, and Astro files
-npm run check  # Astro diagnostics and TypeScript static analysis
+npm test       # Core search tests
+npm run lint   # ESLint
+npm run check  # Astro diagnostics and TypeScript checks
 ```
 
-GitHub Actions runs these checks on pushes and pull requests. Tests cover search
-indexing, filtering, content/URL preparation, snippets, and loading recovery.
-Keep additions focused on realistic core regressions; no UI tests or coverage quota.
-
-## Deploy
-The template provides a workflow to deploy the website on Github pages as a static website.
+GitHub Actions runs these checks on pushes and pull requests. The tests cover search indexing, filtering, content and URL preparation, snippets, and loading recovery.
 
 ## Releases and changelog
 
-Publish a GitHub release with a tag and release notes (GitHub's **Generate release
-notes** button can provide a starting point). The **Update changelog** workflow
-regenerates [CHANGELOG.md](CHANGELOG.md) from all published releases, newest first,
-and commits it to the default branch. Pre-releases are included and labeled;
-drafts are excluded. Editing or deleting a release also refreshes the file.
+[CHANGELOG.md](CHANGELOG.md) is generated from published GitHub releases. Create a release with a tag and release notes; the **Update changelog** workflow refreshes the file and commits it to the default branch. Editing or deleting a release also refreshes it. Prereleases are included; drafts are excluded.
 
-You can run the workflow manually from the Actions tab to import existing releases.
-Edit release notes on GitHub instead of editing the generated changelog. The
-workflow uses the built-in `GITHUB_TOKEN` with `contents: write`; repository rules
-must allow it to commit to the default branch.
+You can run the workflow manually from the Actions tab to import existing releases. Edit release notes on GitHub rather than the generated file. Repository rules must allow the workflow's `GITHUB_TOKEN` to commit to the default branch.
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+[MIT](LICENSE).
