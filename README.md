@@ -1,3 +1,5 @@
+![Astro Academia](art/banner.png)
+
 # Astro Academia
 
 [![CI](https://github.com/maiobarbero/astro_academia/actions/workflows/ci.yml/badge.svg)](https://github.com/maiobarbero/astro_academia/actions/workflows/ci.yml)
@@ -6,8 +8,6 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 <a href="https://buymeacoffee.com/maiobarbero"><img src="https://cdn.buymeacoffee.com/buttons/default-yellow.png" alt="Buy Me a Coffee" height="41" width="174"></a>
-
-<!-- Add the project banner here when ready. -->
 
 Astro Academia is an Astro template for a personal academic website. It brings your research, publications, CV, and writing into one place, with content stored in Markdown and TypeScript files alongside the site.
 
