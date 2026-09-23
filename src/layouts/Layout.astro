@@ -9,6 +9,7 @@ import '../styles/global.css'
 
 import { seo, profile, template } from '../settings'
 import Footer from '../components/ui/Footer.astro'
+import Search from '../components/ui/Search.astro'
 
 type Props = {
 	title?: string
@@ -65,7 +66,8 @@ const {
 							{profile.title}
 							{profile.fullName}
 						</div>
-						<div class='navbar-end'>
+						<div class='navbar-end gap-3 sm:gap-4'>
+							<Search />
 							{!template.menu_left &&
 								<ThemeSelector />
 							}

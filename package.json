@@ -3,6 +3,8 @@
   "type": "module",
   "version": "2.0.0",
   "scripts": {
+    "test:search": "node --test tests/search.test.mjs",
+    "check": "astro check",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
@@ -16,13 +18,19 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "astro": "^7.3.4",
+    "mdast-util-to-string": "^4.0.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
+    "remark-parse": "^11.0.0",
     "tailwindcss": "^4.3.3",
-    "theme-change": "^3.0.4"
+    "theme-change": "^3.0.4",
+    "unified": "^11.0.5",
+    "zbsearch": "^4.0.0"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
     "@tailwindcss/typography": "^0.5.20",
-    "daisyui": "^5.7.43"
+    "daisyui": "^5.7.43",
+    "typescript": "^6.0.3"
   }
 }
