@@ -155,12 +155,6 @@ npm run check  # Astro diagnostics and TypeScript checks
 
 GitHub Actions runs these checks on pushes and pull requests. The tests cover search indexing, filtering, content and URL preparation, snippets, and loading recovery.
 
-## Releases and changelog
-
-[CHANGELOG.md](CHANGELOG.md) is generated from published GitHub releases. Create a release with a tag and release notes; the **Update changelog** workflow refreshes the file and commits it to the default branch. Editing or deleting a release also refreshes it. Prereleases are included; drafts are excluded.
-
-You can run the workflow manually from the Actions tab to import existing releases. Edit release notes on GitHub rather than the generated file. Repository rules must allow the workflow's `GITHUB_TOKEN` to commit to the default branch.
-
 ## License
 
 [MIT](LICENSE).
