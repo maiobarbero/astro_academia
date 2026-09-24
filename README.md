@@ -17,7 +17,7 @@ The template includes a blog with tags and pagination, search across posts and p
 
 ## Getting started
 
-Fork this repository, then clone your fork. From the project directory, install dependencies and start the development server:
+Fork this repository, then clone your fork, or create a new repository using **Astro Academia** as template. From the project directory, install dependencies and start the development server:
 
 ```sh
 nvm install
