@@ -25,7 +25,7 @@ jobs:
         with:
           script: |
             const fs = require('node:fs');
-            const { default: updateChangelog } = await import(
+            const { renderChangelog } = await import(
               `${process.env.GITHUB_WORKSPACE}/scripts/update-changelog.mjs`
             );
 
@@ -40,7 +40,7 @@ jobs:
 
             fs.writeFileSync(
               'CHANGELOG.md',
-              updateChangelog.renderChangelog(releases)
+              renderChangelog(releases)
             );
 
       - uses: peter-evans/create-pull-request@v7
@@ -48,7 +48,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: automation/update-changelog
           delete-branch: true
-          commit-message: docs: update changelog from GitHub releases
-          title: docs: update changelog from GitHub releases
-          body: Generated from the current published GitHub releases.
+          commit-message: "docs: update changelog from GitHub releases"
+          title: "docs: update changelog from GitHub releases"
+          body: "Generated from the current published GitHub releases."
           add-paths: CHANGELOG.md
